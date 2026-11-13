@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ur-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sirf tumhare liye 🔒</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,400&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#fff0f2;--bg2:#f7c9d4;--ink:#4a1830;--muted:#8d5a70;--panel:rgba(255,255,255,.7);--line:rgba(74,24,48,.18);--rose:#c2375f;--brass1:#e8c27a;--brass2:#b98a3e;--paper:#fff8f0;--paper-ink:#3b1a28;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1d0a15;--bg2:#3d1229;--ink:#ffe9ee;--muted:#d7a2b5;--panel:rgba(255,255,255,.06);--line:rgba(255,233,238,.18);--rose:#ff7d9d}}
+:root[data-theme="dark"]{--bg1:#1d0a15;--bg2:#3d1229;--ink:#ffe9ee;--muted:#d7a2b5;--panel:rgba(255,255,255,.06);--line:rgba(255,233,238,.18);--rose:#ff7d9d}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;font-family:var(--sans);color:var(--ink);background:radial-gradient(120% 90% at 50% 0%,var(--bg2),var(--bg1) 70%);background-color:var(--bg1);overflow-x:hidden}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#hearts span{position:absolute;bottom:-40px;opacity:0;animation:rise linear forwards}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}15%{opacity:.5}100%{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+main{position:relative;z-index:1;min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.screen{display:none;width:100%;max-width:440px}
+.screen.on{display:block}
+
+/* lock */
+.lock-card{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:28px 24px 24px;text-align:center;backdrop-filter:blur(6px)}
+.padlock{width:120px;height:140px;margin:0 auto 6px;display:block;overflow:visible}
+.shackle{transform-origin:78px 56px;transition:transform .7s cubic-bezier(.3,1.4,.5,1)}
+.opened .shackle{transform:translateY(-14px) rotate(-22deg)}
+.padlock.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-9px) rotate(-4deg)}40%{transform:translateX(9px) rotate(4deg)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+h1{font-family:var(--serif);font-weight:500;font-size:1.7rem;line-height:1.2;margin:8px 0 6px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:.98rem}
+.keys{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+.keys i{width:26px;height:8px;border-radius:4px;background:var(--line);transition:background .4s}
+.keys i.done{background:var(--rose)}
+.q{font-family:var(--serif);font-style:italic;font-size:1.25rem;line-height:1.4;margin:0 0 16px;min-height:3.5em}
+input{width:100%;font:inherit;font-size:1.05rem;text-align:center;color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--line);padding:10px 6px;outline:none}
+input:focus-visible{border-bottom-color:var(--rose)}
+.btn{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:999px;padding:13px 28px;color:#fff;background:var(--rose);margin-top:18px}
+.btn:focus-visible{outline:3px solid var(--brass1);outline-offset:3px}
+.msg{min-height:1.4em;margin:12px 0 0;font-size:.95rem;color:var(--muted)}
+.msg.bad{color:var(--rose)}
+
+/* letter */
+.paper{background:var(--paper);color:var(--paper-ink);border-radius:6px 6px 22px 22px;padding:34px 26px 28px;box-shadow:0 18px 50px rgba(0,0,0,.28);border-top:6px solid var(--rose)}
+.paper h2{font-family:var(--serif);font-weight:500;font-size:1.9rem;margin:0 0 16px;line-height:1.2}
+.paper p{font-family:var(--serif);font-size:1.12rem;line-height:1.75;margin:0 0 14px;opacity:0;transform:translateY(8px);animation:in .9s forwards}
+.paper .sign{font-style:italic;text-align:right;margin-top:20px}
+@keyframes in{to{opacity:1;transform:none}}
+.ask{opacity:0;animation:in .9s forwards;text-align:center;margin-top:22px;min-height:120px;position:relative}
+.ask .q2{font-family:var(--serif);font-size:1.3rem;margin:0 0 14px}
+.ask .btn{margin:6px}
+.btn.alt{background:transparent;color:var(--paper-ink);border:1.5px solid var(--line);transition:transform .25s}
+.thanks{font-family:var(--serif);font-size:1.25rem;line-height:1.6}
+.burst{position:fixed;z-index:5;pointer-events:none;font-size:26px;animation:pop 1.6s ease-out forwards}
+@keyframes pop{to{transform:translate(var(--dx),var(--dy)) scale(1.4);opacity:0}}
+.scene{margin:10px 0 20px;opacity:0;animation:in .9s forwards;text-align:center}
+.scene svg{width:100%;max-width:340px;height:auto;overflow:visible}
+.scene .cap{font-family:var(--serif);font-style:italic;min-height:1.7em;margin:6px 0 0;font-size:1.08rem}
+.scene .pics{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.scene .pics img{max-width:46%;max-height:170px;border-radius:14px}
+.ch{transform-box:fill-box;transform-origin:50% 100%;transition:transform 1.4s cubic-bezier(.5,0,.3,1)}
+.armc,.armc2{transform-box:fill-box;transition:transform 1.4s cubic-bezier(.5,0,.3,1)}
+.armc{transform-origin:left center}
+.armc2{transform-origin:right center}
+.tear,.heartpop{opacity:0;transition:opacity .7s}
+.s1 .cat{transform:translateY(8px) rotate(10deg)}
+.s1 .tear{opacity:1}
+.s2 .bun{transform:translateY(-6px)}
+.s3 .cat{transform:translateX(30px)}
+.s3 .bun{transform:translateX(-30px)}
+.s3 .armc,.s3 .armc2{transform:scaleX(2.4)}
+.s3 .tear{opacity:0}
+.s3 .heartpop{opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition:none!important}#hearts{display:none}}
+</style>
+</head>
+<body>
+<div id="hearts" aria-hidden="true"></div>
+<main>
+  <section class="screen on" id="lockScreen">
+    <div class="lock-card">
+      <svg class="padlock" id="padlock" viewBox="0 0 156 160" aria-hidden="true">
+        <defs><linearGradient id="br" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0cf8a"/><stop offset="1" stop-color="#b3842f"/></linearGradient></defs>
+        <path class="shackle" d="M42 70V50a36 36 0 0 1 72 0v20" fill="none" stroke="url(#br)" stroke-width="13" stroke-linecap="round"/>
+        <rect x="20" y="66" width="116" height="84" rx="18" fill="url(#br)"/>
+        <rect x="20" y="66" width="116" height="84" rx="18" fill="none" stroke="rgba(0,0,0,.15)" stroke-width="2"/>
+        <path d="M78 94c-9-9-22 0-14 10l14 14 14-14c8-10-5-19-14-10z" fill="#7a1f3d"/>
+      </svg>
+      <h1 id="title">Yeh page locked hai</h1>
+      <p class="sub" id="sub">Kholne ke liye mere sawalon ke jawab do</p>
+      <div class="keys" id="keys" aria-label="Progress"></div>
+      <p class="q" id="question"></p>
+      <input id="answer" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Jawab likho…" aria-label="Jawab">
+      <p class="msg" id="msg" role="status"></p>
+      <button class="btn" id="go">Check karo</button>
+    </div>
+  </section>
+
+  <section class="screen" id="letterScreen">
+    <article class="paper">
+      <h2 id="lTitle"></h2>
+      <div id="lBody"></div>
+      <p class="sign" id="lSign"></p>
+      <div class="ask" id="ask">
+        <p class="q2" id="ask-q"></p>
+        <button class="btn" id="yes"></button>
+        <button class="btn alt" id="no"></button>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script>
+/* ===== YAHAN SAB CHEEZEIN APNI MARZI SE BADLO ===== */
+const CONFIG = {
+  herName: "Mishuu",
+  myName: "Hamuuu",
+  /* Sawal aur jawab. "a" mein jitne chaho accepted jawab daal sakte ho (chhote letters mein). */
+  questions: [
+    { q: "Hum dono ki pehli baat kahan hui thi?", a: ["massanger", "massanger per", "messenger", "messenger per", "messenger par", "massanger par", "fb messenger"], hint: "Woh din yaad karo jab sab shuru hua 😌" },
+    { q: "Main tumhe pyar se kya bulata hoon?", a: ["mishu", "mishuu", "mishuuu", "mishuuuu", "mishuuuuu"], hint: "Bohot baar suna hoga tumne 🙈" },
+    { q: "Meri sab se favourite cheez tumhari kya hai?", a: ["paon", "pao", "pon", "paun", "pair", "pairon", "pairy", "feet", "foot"], hint: "Sar se thora neeche dekho 🙈" }
+  ],
+  letterTitle: "Sorry, Mishuu 💔",
+  paragraphs: [
+    "Sab se pehle shukriya ke aap yahan tak aayi, Mishuu. Yaar dekho, mujhe aadat hai ke meri Mishuu bas meri ho, aap ho bhi meri, aur humesha mere saath ho. Lekin mujhe aapke paas wali hawa se bhi dar lagta hai, bas yeh dar hai ke hamara rishta kharab na ho.",
+    "Isi liye main chahta hoon ke agar main kuch galat kahoon, to please usko samjha diya karein.",
+    "Main aapke bina ek second bhi nahi guzar sakta. Aapke bina poori zindagi kaise guzaroonga? Is wajah se agar meri wajah se aap hurt hui hain, to yaar sorry meri jaan, next time nahi hoga.",
+    "Dekho, maine pehle bhi bohot si baatein aap se seekhi hain, aap ne mujhe bataya hai ke kaise karna hai. Baaki sab bhi inshaAllah theek ho jayega.",
+    "Aapko pata bhi hai ke aapke bina mera kuch nahi bane ga. Jo kuch bhi hai, sab aapki hi wajah se hai. Ab bas gussa chhor dein meri jaan, is se kuch faida nahi hota, bas hum dono ko takleef hoti hai."
+  ],
+  askText: "Maaf kar do na? 🥺",
+  yesText: "Haan, maaf kiya ❤️",
+  noText: "Nahi",
+  /* Apni images ke naam (file repo mein index.html ke saath rakho), jaise ["bubu-dudu.gif", "doraemon.png"] */
+  images: [],
+  thanks: "Shukriya meri jaan 🥹❤️ Main wada karta hoon, tumhe dobara rulaunga nahi."
+};
+/* ===== NEECHE KUCH CHHERNE KI ZAROORAT NAHI ===== */
+
+const $ = id => document.getElementById(id);
+const norm = s => s.toLowerCase().replace(/[\s.,!?'’"“”\-_]/g, "").replace(/(.)\1+/g, "$1");
+let step = 0, wrong = 0;
+
+function drawKeys(){
+  $("keys").innerHTML = CONFIG.questions.map((_, i) => '<i class="' + (i < step ? "done" : "") + '"></i>').join("");
+}
+function showQ(){
+  $("question").textContent = CONFIG.questions[step].q;
+  $("answer").value = ""; wrong = 0;
+  $("msg").textContent = ""; $("msg").className = "msg";
+  drawKeys(); $("answer").focus();
+}
+function check(){
+  const cur = CONFIG.questions[step];
+  const val = norm($("answer").value);
+  if(!val) return;
+  if(cur.a.some(x => norm(x) === val)){
+    step++;
+    if(step >= CONFIG.questions.length){ unlock(); } else {
+      $("msg").textContent = "Sahi jawab! 😍 Agla sawal…";
+      drawKeys();
+      setTimeout(showQ, 700);
+    }
+  } else {
+    wrong++;
+    const pad = $("padlock");
+    pad.classList.remove("shake"); void pad.getBoundingClientRect(); pad.classList.add("shake");
+    $("msg").className = "msg bad";
+    $("msg").textContent = wrong >= 2 ? "Galat. Hint: " + cur.hint : "Galat jawab 😤 Dobara koshish karo";
+  }
+}
+function unlock(){
+  drawKeys();
+  $("lockScreen").classList.add("opened");
+  $("title").textContent = "Khul gaya! 🔓";
+  $("sub").textContent = "";
+  $("question").textContent = "";
+  $("answer").style.display = "none"; $("go").style.display = "none";
+  $("msg").textContent = "";
+  setTimeout(showLetter, 1500);
+}
+const SCENE_SVG = `<svg viewBox='0 0 300 190' role='img' aria-label='Do cute dost sorry bolte aur hug karte hue'><g class='ch cat'><ellipse cx='90' cy='132' rx='40' ry='38' fill='#9db4d6'/><ellipse cx='90' cy='138' rx='24' ry='24' fill='#d9e5f5'/><polygon points='62,64 66,36 86,54' fill='#9db4d6'/><polygon points='118,64 114,36 94,54' fill='#9db4d6'/><polygon points='67,56 69,44 79,53' fill='#f4a9bd'/><polygon points='113,56 111,44 101,53' fill='#f4a9bd'/><circle cx='90' cy='84' r='32' fill='#9db4d6'/><circle cx='78' cy='84' r='3.5' fill='#3b1a28'/><circle cx='102' cy='84' r='3.5' fill='#3b1a28'/><ellipse cx='70' cy='94' rx='6' ry='3.5' fill='#f4a9bd' opacity='.8'/><ellipse cx='110' cy='94' rx='6' ry='3.5' fill='#f4a9bd' opacity='.8'/><path d='M84 95q6 6 12 0' fill='none' stroke='#3b1a28' stroke-width='2' stroke-linecap='round'/><ellipse class='tear' cx='74' cy='96' rx='2.5' ry='5' fill='#6cb8f5'/><ellipse class='armc' cx='116' cy='124' rx='13' ry='8' fill='#9db4d6'/></g><g class='ch bun'><ellipse cx='210' cy='132' rx='40' ry='38' fill='#ffd1dc'/><ellipse cx='210' cy='138' rx='24' ry='24' fill='#fff1f5'/><ellipse cx='197' cy='38' rx='9' ry='26' fill='#ffd1dc'/><ellipse cx='223' cy='38' rx='9' ry='26' fill='#ffd1dc'/><ellipse cx='197' cy='40' rx='4.5' ry='18' fill='#f4a9bd'/><ellipse cx='223' cy='40' rx='4.5' ry='18' fill='#f4a9bd'/><circle cx='210' cy='84' r='32' fill='#ffd1dc'/><circle cx='198' cy='84' r='3.5' fill='#3b1a28'/><circle cx='222' cy='84' r='3.5' fill='#3b1a28'/><ellipse cx='190' cy='94' rx='6' ry='3.5' fill='#f48fb1' opacity='.7'/><ellipse cx='230' cy='94' rx='6' ry='3.5' fill='#f48fb1' opacity='.7'/><ellipse cx='210' cy='90' rx='3' ry='2.2' fill='#e0607e'/><path d='M204 96q6 6 12 0' fill='none' stroke='#3b1a28' stroke-width='2' stroke-linecap='round'/><ellipse class='armc2' cx='184' cy='124' rx='13' ry='8' fill='#ffd1dc'/></g><g class='heartpop' font-size='20' text-anchor='middle'><text x='150' y='74'>❤️</text><text x='128' y='48'>💕</text><text x='174' y='44'>💖</text></g></svg>`;
+function makeScene(delay){
+  const el = document.createElement('div');
+  el.className = 'scene'; el.style.animationDelay = delay + 's';
+  el.innerHTML = SCENE_SVG + `<p class='cap'></p><div class='pics'></div>`;
+  const cap = el.querySelector('.cap'), pics = el.querySelector('.pics');
+  (CONFIG.images || []).forEach(src => { const im = document.createElement('img'); im.src = src; im.alt = ''; pics.appendChild(im); });
+  const steps = [[0.8,'s1','Sorry ' + CONFIG.herName + ' 🥺'],[3.8,'s2','Hmm… chalo, maaf kiya 🥹'],[6.2,'s3','Aao, hug karte hain 🤗❤️']];
+  steps.forEach(([t,c,txt]) => setTimeout(() => { el.classList.add(c); cap.textContent = txt; }, (delay + t) * 1000));
+  return el;
+}
+function showLetter(){
+  $("lockScreen").classList.remove("on");
+  $("letterScreen").classList.add("on");
+  $("lTitle").textContent = CONFIG.letterTitle;
+  let d = 0.4;
+  $("lBody").innerHTML = "";
+  CONFIG.paragraphs.forEach((t, i) => {
+    const p = document.createElement("p");
+    p.textContent = t; p.style.animationDelay = d + "s"; d += 1.8;
+    $("lBody").appendChild(p);
+    if(i === 2){ $("lBody").appendChild(makeScene(d)); d += 8.5; }
+  });
+  $("lSign").textContent = "Sirf aapka, " + CONFIG.myName;
+  $("lSign").style.animationDelay = d + "s"; d += 1.2;
+  $("ask-q").textContent = CONFIG.askText;
+  $("yes").textContent = CONFIG.yesText;
+  $("no").textContent = CONFIG.noText;
+  $("ask").style.animationDelay = d + "s";
+}
+
+/* "Nahi" button bhaag jata hai */
+function dodge(e){
+  if(e) e.preventDefault();
+  const b = $("no");
+  const x = (Math.random() - .5) * 220, y = (Math.random() - .5) * 140;
+  b.style.transform = "translate(" + x + "px," + y + "px)";
+}
+$("no").addEventListener("mouseenter", dodge);
+$("no").addEventListener("touchstart", dodge, {passive:false});
+$("no").addEventListener("click", dodge);
+
+$("yes").addEventListener("click", () => {
+  $("ask").innerHTML = '<p class="thanks"></p>';
+  $("ask").querySelector(".thanks").textContent = CONFIG.thanks;
+  const em = ["❤️","💖","💕","🌹","🥰"];
+  for(let i = 0; i < 28; i++){
+    const s = document.createElement("span");
+    s.className = "burst"; s.textContent = em[i % em.length];
+    s.style.left = "50%"; s.style.top = "55%";
+    const a = Math.random() * Math.PI * 2, r = 120 + Math.random() * 220;
+    s.style.setProperty("--dx", Math.cos(a) * r + "px");
+    s.style.setProperty("--dy", Math.sin(a) * r + "px");
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1700);
+  }
+});
+
+/* peeche floating hearts */
+function floatHeart(){
+  const s = document.createElement("span");
+  s.textContent = ["💗","🤍","🌸","💞"][Math.floor(Math.random() * 4)];
+  s.style.left = Math.random() * 100 + "%";
+  s.style.fontSize = 14 + Math.random() * 18 + "px";
+  s.style.animationDuration = 9 + Math.random() * 8 + "s";
+  $("hearts").appendChild(s);
+  setTimeout(() => s.remove(), 18000);
+}
+setInterval(floatHeart, 1400);
+
+$("go").addEventListener("click", check);
+$("answer").addEventListener("keydown", e => { if(e.key === "Enter") check(); });
+showQ();
+</script>
+</body>
+</html>
